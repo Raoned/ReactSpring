@@ -1,4 +1,5 @@
 package com.engraone.dsmeta.entities;
+
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -8,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name ="tb_sales")
+@Table(name = "tb_sales")
 public class Sale {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,7 @@ public class Sale {
 	private Integer deals;
 	public Double amount;
 	private LocalDate date;
-	
+
 	public Sale() {
 	}
 
@@ -69,6 +70,5 @@ public class Sale {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-	
-	
+
 }
