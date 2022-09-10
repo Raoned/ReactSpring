@@ -2,20 +2,24 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import { Sale } from "../../models/sale"
+import { BASE_URL } from "../../utils/request"
 import NotificationButton from '../NotificationButton'
 import './styles.css'
 function SalesCard() {
     const min = new Date(new Date().setDate(new Date().getDate() - 365))
-    const max  = new Date()
-    const [minDate, setMinDate  ] = useState(min)
-    const [maxDate, setMaxDate  ] = useState(max)
-    
-    useEffect(()=> {
-        axios.get("http://localhost:8080/sales").then(response => {console.log(response.data)})
+    const max = new Date()
+    const [minDate, setMinDate] = useState(min)
+    const [maxDate, setMaxDate] = useState(max)
+
+    const [sales, setSales] = useState<Sale[]>([]);
+
+    useEffect(() => {
+        axios.get(`${BASE_URL}/sales`).then(response => { setSales(response.data.content) })
     }, []);
-    
-    
-    
+
+
+
     return (
         <div className="dsmeta-card">
             <h2 className="dsmeta-sales-title">Vendas</h2>
@@ -52,51 +56,23 @@ function SalesCard() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="show992">#333</td>
-                            <td className="show576">07/08/1999</td>
-                            <td>Sebastian V.</td>
-                            <td className="show992">23</td>
-                            <td className="show992">15</td>
-                            <td>5300</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
+                        {sales.map(sale => {
+                            return <tr key = {sale.id}>
+                                <td className="show992">{sale.id}</td>
+                                <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
+                                <td>{sale.sellerName}</td>
+                                <td className="show992">{sale.visited}</td>
+                                <td className="show992">{sale.deals}</td>
+                                <td>{sale.amount.toFixed(2)}</td>
+                                <td>
+                                    <div className="dsmeta-red-btn-container">
+                                        <NotificationButton />
+                                    </div>
 
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">#333</td>
-                            <td className="show576">07/08/1999</td>
-                            <td>Verstappen</td>
-                            <td className="show992">23</td>
-                            <td className="show992">15</td>
-                            <td>5300</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">#333</td>
-                            <td className="show576">07/08/1999</td>
-                            <td>Sainz</td>
-                            <td className="show992">23</td>
-                            <td className="show992">15</td>
-                            <td>5300</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-
-
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        })}
                     </tbody>
                 </table>
             </div>
